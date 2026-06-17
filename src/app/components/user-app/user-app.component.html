@@ -1,0 +1,33 @@
+<h3> 
+    {{title}}
+</h3>
+
+@if(users.length==0){
+    <p>No hay usuarios</p>
+}
+@else {
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Lastname</th>
+                <th>Email</th>
+                <th>Username</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+
+        @for( user of users;track $index){
+            <tr>
+                <td>{{user.id}}</td>
+                <td>{{user.name}}</td>
+                <td>{{user.lastname}}</td>
+                <td>{{user.email}}</td>
+                <td>{{user.username}}</td>
+            </tr>
+        }   
+    </tbody>
+    </table>    
+}
