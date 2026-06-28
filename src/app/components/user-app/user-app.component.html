@@ -5,14 +5,11 @@
         {{title}}
     </h3>
 
-    <button class="btn btn-primary"
-        (click)="setOpen()"
-
-    > {{open== true? 'cerrar':'crear usuario'}} </button>
-    <div class="row my-5">
+    <button class="btn btn-primary" (click)="setOpen()"> {{open== true? 'cerrar':'crear usuario'}} </button>
+    <div>
         @if(open){
-        <div class="col">
-            <user-form (newUserEventEmitter)="addUser($event)" [user]="userSelected" />
+        <div class="abrir-modal">
+            <user-form (newUserEventEmitter)="addUser($event)" [user]="userSelected" (openEvenEmitter)="  setOpen()" />
 
             <!--[user]="userSelected"
             enviar al componente hijo
@@ -20,11 +17,14 @@
         </div>
         }
 
-
-        <div class="col">
+        <div>
             <user [users]="users" (idUserEventEmitter)="removeUser($event)"
                 (selectUserEventEmitter)="setselectedUser($event)" />
         </div>
+
+
+
+
 
 
     </div>

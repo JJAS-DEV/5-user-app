@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
   selector: 'app-user',
   imports: [UserComponent, UserFormComponent],
   templateUrl: './user-app.component.html',
+  styleUrls:['../user-app.component.css']
 })
 export class UserAppComponent implements OnInit {
   title: string = 'listado de usuarios';

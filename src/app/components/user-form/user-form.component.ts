@@ -11,6 +11,10 @@ import { NgFor } from '@angular/common';
 export class UserFormComponent {
   @Input()user: User;
   @Output() newUserEventEmitter: EventEmitter<User> = new EventEmitter();
+
+  @Output() openEvenEmitter= new EventEmitter();
+
+  @Input() open:boolean=false;
   constructor() {
     this.user = new User();
   }
@@ -35,6 +39,8 @@ export class UserFormComponent {
     
   }
 
-
+  onOpen(){
+    this.openEvenEmitter.emit();
+  }
 
 }
