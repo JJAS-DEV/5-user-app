@@ -1,33 +1,31 @@
-<h3> 
-    {{title}}
-</h3>
+<div class="container my-5">
 
-@if(users.length==0){
-    <p>No hay usuarios</p>
-}
-@else {
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Lastname</th>
-                <th>Email</th>
-                <th>Username</th>
-            
-        </tr>
-    </thead>
-    <tbody>
 
-        @for( user of users;track $index){
-            <tr>
-                <td>{{user.id}}</td>
-                <td>{{user.name}}</td>
-                <td>{{user.lastname}}</td>
-                <td>{{user.email}}</td>
-                <td>{{user.username}}</td>
-            </tr>
-        }   
-    </tbody>
-    </table>    
-}
+    <h3>
+        {{title}}
+    </h3>
+
+    <button class="btn btn-primary"
+        (click)="setOpen()"
+
+    > {{open== true? 'cerrar':'crear usuario'}} </button>
+    <div class="row my-5">
+        @if(open){
+        <div class="col">
+            <user-form (newUserEventEmitter)="addUser($event)" [user]="userSelected" />
+
+            <!--[user]="userSelected"
+            enviar al componente hijo
+   -->
+        </div>
+        }
+
+
+        <div class="col">
+            <user [users]="users" (idUserEventEmitter)="removeUser($event)"
+                (selectUserEventEmitter)="setselectedUser($event)" />
+        </div>
+
+
+    </div>
+</div>
