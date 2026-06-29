@@ -18,10 +18,12 @@ export class UserAppComponent implements OnInit {
   title: string = 'listado de usuarios';
 
 
+  
+
   users: User[] = [];
   constructor(
     private router:Router,
-    private userService: UserService, private sharingData:SharingDataService)
+    private userService: UserService, private sharingData:SharingDataService )
   {   
   }
   ngOnInit(): void {
