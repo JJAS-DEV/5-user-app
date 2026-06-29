@@ -36,7 +36,9 @@
             <td><button class="btn btn-danger btn-sm" (click)="onRemoveUser(user.id)">
                     eliminar
                 </button></td>
-            <td><button class="btn btn-info btn-sm" (click)="onSelectedUser(user)">
+            <td><button class="btn btn-info btn-sm" (click)="onSelectedUser(user)"
+                [routerLink]="['/user/edit',user.id]"
+                >
                     actualizar
                 </button></td>
         </tr>
