@@ -4,34 +4,38 @@ import { UserService } from '../../services/user.service';
 import { UserComponent } from '../user/user.component';
 import { UserFormComponent } from '../user-form/user-form.component';
 import Swal from 'sweetalert2';
+import { Router, RouterOutlet } from '@angular/router';
+import { NavbarComponent } from '../navbar/navbar.component';
+import { SharingDataService } from '../../services/sharing-data/sharing-data.service';
 
 @Component({
   selector: 'app-user',
-  imports: [UserComponent, UserFormComponent],
+  imports: [RouterOutlet, NavbarComponent],
   templateUrl: './user-app.component.html',
   styleUrls:['../user-app.component.css']
 })
 export class UserAppComponent implements OnInit {
   title: string = 'listado de usuarios';
-  userSelected: User;
 
-  open:boolean=false;
 
   users: User[] = [];
-  constructor(private userService: UserService) {
-    this.userSelected = new User();
-
+  constructor(
+    private router:Router,
+    private userService: UserService, private sharingData:SharingDataService)
+  {   
   }
   ngOnInit(): void {
     this.userService.findAll().subscribe(users => {
       this.users = users;
     });
+    this.addUser();
+    this.removeUser();
+
   }
 
-  addUser(user: User) {
-
-    //le agregamos un usuario
-    if (user.id > 0) {
+  addUser() {
+    this.sharingData.newUserEventEmitter.subscribe(user=> {
+        if (user.id > 0) {
       this.users = this.users.map(u => (u.id == user.id) ? { ...user } : u);
       //   asi es mas largo  if (u.id== user.id){
       //     return {... user};
@@ -50,15 +54,20 @@ export class UserAppComponent implements OnInit {
       icon: "success"
     });
 
-    this.userSelected = new User();
-    this.setOpen();
+        this.router.navigate(['/users']);
 
+    })
+
+    //le agregamos un usuario
+  
+ 
   } 
   
   selectedUser?: User;             // propiedad para guardar el usuario encontrado
-  removeUser(id: number): void {
-     this.selectedUser = this.users.find(user => user.id === id);
-const usuario_remove: User | undefined = this.users.find(user => user.id === id)!;
+  removeUser(): void {
+
+    this.sharingData.idUserEventEmitter.subscribe(id=>{
+      const usuario_remove: User | undefined = this.users.find(user => user.id === id)!;
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: "btn btn-success",
@@ -76,6 +85,9 @@ const usuario_remove: User | undefined = this.users.find(user => user.id === id)
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) this.users = this.users.filter(user => user.id != id);
+      this.router.navigate(['/users/create'],{skipLocationChange:true}).then(()=>{
+        this.router.navigate(['/users'],{state:{users: this.users}})
+      })
       swalWithBootstrapButtons.fire({
         title: "Deleted!",
         text: "usuario eliminado con exito.",
@@ -90,20 +102,15 @@ const usuario_remove: User | undefined = this.users.find(user => user.id === id)
         });
     });
 
+    })
+
+
 
 
   }
-  setselectedUser(user: User): void {
-    this.userSelected = { ...user };
-    this.open=true;
+  
 
 
-  }
 
-
-  setOpen(){
-    this.open= !this.open;
-
-  }
 
 }

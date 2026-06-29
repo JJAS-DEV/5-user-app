@@ -1,39 +1,46 @@
-    @if(users.length==0){
-            <p>No hay usuarios</p>
-            }
-            @else {
-            <table class="table table-hover table-striped">
-                <thead>
-                    <tr>
-                        <!-- <th>Id</th> -->
-                        <th>Name</th>
-                        <th>Lastname</th>
-                        <th>Email</th>
-                        <th>Username</th>
-                        <th>eliminar</th>
-                        <th>
-                            actulizar
-                        </th>
+<h3>
+    {{title}}
+</h3>
 
-                    </tr>
-                </thead>
-                <tbody>
+<button class="btn btn-primary my-2" [routerLink]="['/users/create']"> crear usuario </button>
 
-                    @for( user of users;track $index){
-                    <tr>
-                        <!-- <td>{{user.id}}</td> -->
-                        <td>{{user.name}}</td>
-                        <td>{{user.lastname}}</td>
-                        <td>{{user.email}}</td>
-                        <td>{{user.username}}</td>
-                        <td><button class="btn btn-danger btn-sm" (click)="onRemoveUser(user.id)">
-                            eliminar
-                        </button></td>
-                        <td><button class="btn btn-info btn-sm" (click)="onSelectedUser(user)">
-                            actualizar
-                        </button></td>
-                    </tr>
-                    }
-                </tbody>
-            </table>
-            }
+@if(users.length==0){
+
+        <p class="my-2">No hay usuarios</p>
+}
+@else {
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <!-- <th>Id</th> -->
+            <th>Name</th>
+            <th>Lastname</th>
+            <th>Email</th>
+            <th>Username</th>
+            <th>eliminar</th>
+            <th>
+                actulizar
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+
+        @for( user of users;track $index){
+        <tr>
+            <!-- <td>{{user.id}}</td> -->
+            <td>{{user.name}}</td>
+            <td>{{user.lastname}}</td>
+            <td>{{user.email}}</td>
+            <td>{{user.username}}</td>
+            <td><button class="btn btn-danger btn-sm" (click)="onRemoveUser(user.id)">
+                    eliminar
+                </button></td>
+            <td><button class="btn btn-info btn-sm" (click)="onSelectedUser(user)">
+                    actualizar
+                </button></td>
+        </tr>
+        }
+    </tbody>
+</table>
+}

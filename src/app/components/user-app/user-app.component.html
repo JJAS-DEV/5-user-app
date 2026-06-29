@@ -1,31 +1,10 @@
+
+<navbar [users]="users"/>
 <div class="container my-5">
 
 
-    <h3>
-        {{title}}
-    </h3>
-
-    <button class="btn btn-primary" (click)="setOpen()"> {{open== true? 'cerrar':'crear usuario'}} </button>
-    <div>
-        @if(open){
-        <div class="abrir-modal">
-            <user-form (newUserEventEmitter)="addUser($event)" [user]="userSelected" (openEvenEmitter)="  setOpen()" />
-
-            <!--[user]="userSelected"
-            enviar al componente hijo
-   -->
-        </div>
-        }
-
-        <div>
-            <user [users]="users" (idUserEventEmitter)="removeUser($event)"
-                (selectUserEventEmitter)="setselectedUser($event)" />
-        </div>
+    <router-outlet></router-outlet>
 
 
 
-
-
-
-    </div>
 </div>
