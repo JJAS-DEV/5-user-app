@@ -12,36 +12,35 @@ import { SharingDataService } from '../../services/sharing-data/sharing-data.ser
   selector: 'app-user',
   imports: [RouterOutlet, NavbarComponent],
   templateUrl: './user-app.component.html',
-  styleUrls:['../user-app.component.css']
+  styleUrls: ['../user-app.component.css']
 })
 export class UserAppComponent implements OnInit {
   title: string = 'listado de usuarios';
 
 
-  
+
 
   users: User[] = [];
   constructor(
-    private router:Router,
-    private userService: UserService, private sharingData:SharingDataService )
-    
-  {   
+    private router: Router,
+    private userService: UserService, private sharingData: SharingDataService) {
+
+  }
+  ngOnInit(): void {
     this.userService.findAll().subscribe(users => {
       this.users = users;
     });
-  }
-  ngOnInit(): void {
-     
-   
+
+
     this.addUser();
     this.removeUser();
     this.findUserById();
 
   }
 
-  findUserById(){
-    this.sharingData.findUserByIdEventEmitter.subscribe(id=>{
-      const user= this.users.find(user=>user.id==id);
+  findUserById() {
+    this.sharingData.findUserByIdEventEmitter.subscribe(id => {
+      const user = this.users.find(user => user.id == id);
 
       this.sharingData.selectUserEventEmitter.emit(user);
     })
@@ -49,88 +48,119 @@ export class UserAppComponent implements OnInit {
   }
 
   addUser() {
-    this.sharingData.newUserEventEmitter.subscribe(user=> {
-        if (user.id > 0) {
+    this.sharingData.newUserEventEmitter.subscribe(user => {
+      if (user.id > 0) {
 
-          this.userService.update(user).subscribe(updatedUser => {
+        this.userService.update(user).subscribe({
+          next: updatedUser => {
             this.users = this.users.map(u => (u.id == updatedUser.id) ? { ...updatedUser } : u);
-                        this.router.navigate(['/users'],{state:{users: this.users}});
+            this.router.navigate(['/users'], { state: { users: this.users } });
 
-          });
-      //   asi es mas largo  if (u.id== user.id){
-      //     return {... user};
-      //   }
-      //   return u;
-      // })
+               Swal.fire({
+        title: "guardado!!",
+        text: "guardado con exito!!",
+        icon: "success"
+      },
+      );
 
-    } else {
+          },
+          error: (err) => {
+            if (err.status == 400) {
+              this.sharingData.errorFormEventEmitter.emit(err.error);
+              console.log(err.error);
+            }
+          }
 
-      this.userService.create(user).subscribe(usernew=>{
 
-        this.users = [... this.users, { ...usernew }];
-                        this.router.navigate(['/users'],{state:{users: this.users}});
 
-      });
 
-    }
+        });
+        //   asi es mas largo  if (u.id== user.id){
+        //     return {... user};
+        //   }
+        //   return u;
+        // })
 
-    Swal.fire(  {
-      title: "guardado!!",
-      text: "guardado con exito!!",
-      icon: "success"
-    },
-  );
+      } else {
+
+        this.userService.create(user).subscribe({
+          next: (usernew) => {
+
+            this.users = [... this.users, { ...usernew }];
+            this.router.navigate(['/users'], { state: { users: this.users } });
+
+               Swal.fire({
+        title: "guardado!!",
+        text: "guardado con exito!!",
+        icon: "success"
+      },
+      );
+          },
+          error: (err) => {
+            if (err.status == 400) {
+              this.sharingData.errorFormEventEmitter.emit(err.error);
+              console.log(err.error);
+            }
+
+          }
+
+        });
+
+      }
+
+   
 
 
     })
 
     //le agregamos un usuario
-  
- 
-  } 
-  
+
+
+  }
+
   selectedUser?: User;             // propiedad para guardar el usuario encontrado
   removeUser(): void {
 
-    this.sharingData.idUserEventEmitter.subscribe(id=>{
+    this.sharingData.idUserEventEmitter.subscribe(id => {
       const usuario_remove: User | undefined = this.users.find(user => user.id === id)!;
-    const swalWithBootstrapButtons = Swal.mixin({
-      customClass: {
-        confirmButton: "btn btn-success",
-        cancelButton: "btn btn-danger"
-      },
-      buttonsStyling: false
-    });
-    swalWithBootstrapButtons.fire({
-      title: "se guro que quieres eliminar el usuario? " + usuario_remove.name,
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, delete it!",
-      cancelButtonText: "No, cancel!",
-      reverseButtons: true
-    }).then((result) => {
-      if (result.isConfirmed) 
-      this.userService.remove((Number(id))).subscribe(() => { 
-        this.users = this.users.filter(user => user.id != id);
-      this.router.navigate(['/users/create'],{skipLocationChange:true}).then(()=>{
-        this.router.navigate(['/users'],{state:{users: this.users}})
-
-      })});
-  
-      swalWithBootstrapButtons.fire({
-        title: "Deleted!",
-        text: "usuario eliminado con exito.",
-        icon: "success"
+      const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: "btn btn-success",
+          cancelButton: "btn btn-danger"
+        },
+        buttonsStyling: false
       });
-      if (result.dismiss === Swal.DismissReason.cancel)
-        /* Read more about handling dismissals below */
+      swalWithBootstrapButtons.fire({
+        title: "se guro que quieres eliminar el usuario? " + usuario_remove.name,
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed)
+          this.userService.remove((Number(id))).subscribe(() => {
+            this.users = this.users.filter(user => user.id != id);
+            this.router.navigate(['/users/create'], { skipLocationChange: true }).then(() => {
+              this.router.navigate(['/users'], { state: { users: this.users } })
+
+            })
+          });
+
         swalWithBootstrapButtons.fire({
-          title: "Cancelled",
-          text: "Your imaginary file is safe :)",
-          icon: "error"
+          title: "Deleted!",
+          text: "usuario eliminado con exito.",
+          icon: "success"
         });
-    });
+        if (result.dismiss === Swal.DismissReason.cancel)
+          /* Read more about handling dismissals below */
+          swalWithBootstrapButtons.fire({
+            title: "Cancelled",
+            text: "Your imaginary file is safe :)",
+            icon: "error"
+          });
+      });
 
     })
 
@@ -138,7 +168,7 @@ export class UserAppComponent implements OnInit {
 
 
   }
-  
+
 
 
 
