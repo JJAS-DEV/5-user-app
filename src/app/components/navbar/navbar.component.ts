@@ -9,6 +9,7 @@ import { User } from '../../models/User';
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
-  @Input() users:User[]=[];
+
+  @Input() users: User[] = [];
  
 }

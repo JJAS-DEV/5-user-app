@@ -24,12 +24,15 @@ export class UserAppComponent implements OnInit {
   constructor(
     private router:Router,
     private userService: UserService, private sharingData:SharingDataService )
+    
   {   
-  }
-  ngOnInit(): void {
     this.userService.findAll().subscribe(users => {
       this.users = users;
     });
+  }
+  ngOnInit(): void {
+     
+   
     this.addUser();
     this.removeUser();
     this.findUserById();
@@ -48,7 +51,12 @@ export class UserAppComponent implements OnInit {
   addUser() {
     this.sharingData.newUserEventEmitter.subscribe(user=> {
         if (user.id > 0) {
-      this.users = this.users.map(u => (u.id == user.id) ? { ...user } : u);
+
+          this.userService.update(user).subscribe(updatedUser => {
+            this.users = this.users.map(u => (u.id == updatedUser.id) ? { ...updatedUser } : u);
+                        this.router.navigate(['/users'],{state:{users: this.users}});
+
+          });
       //   asi es mas largo  if (u.id== user.id){
       //     return {... user};
       //   }
@@ -56,17 +64,23 @@ export class UserAppComponent implements OnInit {
       // })
 
     } else {
-      this.users = [... this.users, { ...user, id: new Date().getTime() }]
+
+      this.userService.create(user).subscribe(usernew=>{
+
+        this.users = [... this.users, { ...usernew }];
+                        this.router.navigate(['/users'],{state:{users: this.users}});
+
+      });
 
     }
 
-    Swal.fire({
+    Swal.fire(  {
       title: "guardado!!",
       text: "guardado con exito!!",
       icon: "success"
-    });
+    },
+  );
 
-        this.router.navigate(['/users']);
 
     })
 
@@ -96,10 +110,14 @@ export class UserAppComponent implements OnInit {
       cancelButtonText: "No, cancel!",
       reverseButtons: true
     }).then((result) => {
-      if (result.isConfirmed) this.users = this.users.filter(user => user.id != id);
+      if (result.isConfirmed) 
+      this.userService.remove((Number(id))).subscribe(() => { 
+        this.users = this.users.filter(user => user.id != id);
       this.router.navigate(['/users/create'],{skipLocationChange:true}).then(()=>{
         this.router.navigate(['/users'],{state:{users: this.users}})
-      })
+
+      })});
+  
       swalWithBootstrapButtons.fire({
         title: "Deleted!",
         text: "usuario eliminado con exito.",
