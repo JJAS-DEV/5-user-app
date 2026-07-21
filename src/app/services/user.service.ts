@@ -16,6 +16,9 @@ export class UserService {
   findAll():Observable<User[]>{
     return this.http.get<User[]>(this.url);
   }
+   findAllPageable(page:number):Observable<any>{
+    return this.http.get<any>(this.url+"/page/"+page);
+  }
 
   findById(id:number):Observable<User>{
     return this.http.get<User>(this.url+"/"+id);
@@ -31,6 +34,7 @@ export class UserService {
   remove(id:number):Observable<void>{
     return this.http.delete<void>(this.url+"/"+id);
   }
+
 
 
 }
