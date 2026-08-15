@@ -16,19 +16,19 @@ import { SharingDataService } from '../../services/sharing-data/sharing-data.ser
 })
 export class UserAppComponent implements OnInit {
   title: string = 'listado de usuarios';
-  paginator:any={};
+  paginator: any = {};
   PageUrl: string = '/users/page/';
 
 
-  
+
 
 
   users: User[] = [];
   constructor(
     private router: Router,
     private userService: UserService, private sharingData: SharingDataService
-  ,
-  private route:ActivatedRoute) {
+    ,
+    private route: ActivatedRoute) {
 
   }
   ngOnInit(): void {
@@ -43,7 +43,7 @@ export class UserAppComponent implements OnInit {
     //     this.users = pageable.content as User[];
     //   });
     // })
-  
+
     this.addUser();
     this.removeUser();
     this.findUserById();
@@ -56,7 +56,8 @@ export class UserAppComponent implements OnInit {
     this.sharingData.pageUserEventEmitter.subscribe(pageable => {
       this.users = pageable.users;
       this.paginator = pageable.paginator;
-    })}
+    })
+  }
 
 
   findUserById() {
@@ -75,16 +76,19 @@ export class UserAppComponent implements OnInit {
         this.userService.update(user).subscribe({
           next: updatedUser => {
             this.users = this.users.map(u => (u.id == updatedUser.id) ? { ...updatedUser } : u);
-            this.router.navigate(['/users'], { state: { users: this.users,
-              paginator: this.paginator,  onSameUrlNavigation: 'reload'
-             } });
+            this.router.navigate(['/users'], {
+              state: {
+                users: this.users,
+                paginator: this.paginator, onSameUrlNavigation: 'reload'
+              }
+            });
 
-               Swal.fire({
-        title: "guardado!!",
-        text: "guardado con exito!!",
-        icon: "success"
-      },
-      );
+            Swal.fire({
+              title: "guardado!!",
+              text: "guardado con exito!!",
+              icon: "success"
+            },
+            );
 
           },
           error: (err) => {
@@ -110,16 +114,19 @@ export class UserAppComponent implements OnInit {
           next: (usernew) => {
 
             this.users = [... this.users, { ...usernew }];
-            this.router.navigate(['/users'], { state: { users: this.users,
-              paginator: this.paginator,  onSameUrlNavigation: 'reload'
-             } });
+            this.router.navigate(['/users'], {
+              state: {
+                users: this.users,
+                paginator: this.paginator, onSameUrlNavigation: 'reload'
+              }
+            });
 
-               Swal.fire({
-        title: "guardado!!",
-        text: "guardado con exito!!",
-        icon: "success"
-      },
-      );
+            Swal.fire({
+              title: "guardado!!",
+              text: "guardado con exito!!",
+              icon: "success"
+            },
+            );
           },
           error: (err) => {
             if (err.status == 400) {
@@ -133,7 +140,7 @@ export class UserAppComponent implements OnInit {
 
       }
 
-   
+
 
 
     })
@@ -168,8 +175,12 @@ export class UserAppComponent implements OnInit {
           this.userService.remove((Number(id))).subscribe(() => {
             this.users = this.users.filter(user => user.id != id);
             this.router.navigate(['/users/create'], { skipLocationChange: true }).then(() => {
-              this.router.navigate(['/users'], { state: { users: this.users
-                , paginator: this.paginator } });
+              this.router.navigate(['/users'], {
+                state: {
+                  users: this.users
+                  , paginator: this.paginator
+                }
+              });
             });
           });
 
