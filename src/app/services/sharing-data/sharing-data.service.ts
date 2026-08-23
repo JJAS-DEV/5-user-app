@@ -15,11 +15,14 @@ export class SharingDataService {
 
   private _errorFormEventEmitter= new EventEmitter();
   private _pageUserEventEmitter= new EventEmitter();
+  private _handlerLoginEventEmitter= new EventEmitter();
 
 
   constructor() { }
 
-
+ get handlerLoginEventEmitter(){
+  return this._handlerLoginEventEmitter;
+ }
   get pageUserEventEmitter(): EventEmitter<{ users: User[], paginator: any }>{
     return this._pageUserEventEmitter;
   }
