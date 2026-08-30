@@ -31,4 +31,10 @@ export class NavbarComponent {
   this.router.navigate(['/login'])
   
  }
+  home(){
+
+  this.router.navigate(['/users/page/0'])
+  
+ }
+
 }

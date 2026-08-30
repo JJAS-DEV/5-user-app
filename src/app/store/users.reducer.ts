@@ -11,13 +11,12 @@ export const userReducer=createReducer(
         user
 
     },
-    on(findAll,(state,{users})=>({
-        
-            users:[...users],
-            paginator:state.paginator,
-            user:state.user
-         
-    })),
+  on(findAll, (state, { users }) => ({
+        users: [...users],
+        paginator: state.paginator,
+        user: state.user
+    }
+    )),
 
     on(find, (state,{ id})=>(
         {
@@ -30,17 +29,11 @@ export const userReducer=createReducer(
 
     )
     ),
-    on(setPaginator, (state,{paginator})=>(
-        {
-            users:state.users,
-            paginator:{...paginator},
-            user:state.user
-            
-
-        }
-
-    )
-    ),
+      on(setPaginator, (state, { paginator }) => ({
+        users: state.users,
+        paginator: { ...paginator },
+        user: state.user
+    })),
     on(add, (state,{usernew})=>(
         {
             users:[...state.users,{...usernew}],
@@ -52,9 +45,9 @@ export const userReducer=createReducer(
 
     )
     ),
-    on(update,(state,{userupdate})=>(
+    on(update,(state,{updatedUser})=>(
         {
-            users:state.users.map(u=> (u.id==userupdate.id)? {...userupdate}:u),
+            users:state.users.map(u=> (u.id==updatedUser.id)? {...updatedUser}:u),
             paginator:state.paginator,
             user:state.user
 

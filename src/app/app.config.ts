@@ -9,7 +9,8 @@ import { userReducer } from './store/users.reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }),
-     provideRouter(routes), provideHttpClient(withInterceptors([tokenInterceptor])),
+     provideRouter(routes)
+     , provideHttpClient(withInterceptors([tokenInterceptor])),
       provideStore({
         users:userReducer
       })]

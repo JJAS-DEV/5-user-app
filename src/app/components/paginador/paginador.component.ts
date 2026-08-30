@@ -10,5 +10,9 @@ export class PaginadorComponent {
   @Input() url: string = '';
   @Input() paginator:any={};
 
+  
+  
+  
+
 
 }
