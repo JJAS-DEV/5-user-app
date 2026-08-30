@@ -44,12 +44,12 @@ export class UserAppComponent implements OnInit {
     //     this.users = pageable.content as User[];
     //   });
     // })
+    this.pageUserEventEmitter();
 
     this.addUser();
     this.removeUser();
     this.findUserById();
 
-    this.pageUserEventEmitter();
     this.handlerlogin();
 
   }
