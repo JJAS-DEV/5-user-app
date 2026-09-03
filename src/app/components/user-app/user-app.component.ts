@@ -34,9 +34,9 @@ export class UserAppComponent implements OnInit {
     private userService: UserService, private sharingData: SharingDataService
     ,
     private route: ActivatedRoute, private authservice: AuthService) {
-    this.store.select('users').subscribe(state => {
+    this.store.select(selectUserState).subscribe(state => {
       this.users = state.users;
-      this.paginator = state.paginador;
+      this.paginator = state.paginator;
       this.user = state.user;
     });
 

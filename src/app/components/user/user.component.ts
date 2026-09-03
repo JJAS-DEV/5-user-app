@@ -5,6 +5,9 @@ import { UserService } from '../../services/user.service';
 import { SharingDataService } from '../../services/sharing-data/sharing-data.service';
 import { PaginadorComponent } from '../paginador/paginador.component';
 import { AuthService } from '../../services/auth.service';
+import { Store } from '@ngrx/store';
+import { selectUserState } from '../../store/users.selectors';
+import { load } from '../../store/users.actions';
 
 @Component({
   selector: 'user',
@@ -19,10 +22,16 @@ export class UserComponent implements OnInit {
   users: User[] = [];
   paginator:any={};
   PageUrl: string = '/users/page';
-  constructor(private router: Router,
+  constructor(
+    private store:Store<{users:any}>,
+    private router: Router,
     private service: UserService, private SharingData: SharingDataService, private route: ActivatedRoute,
     private authservice:AuthService
   ) {
+    this.store.select(selectUserState).subscribe(state=>{
+      this.users=state.users;
+      this.paginator=state.paginator;
+    })
 
     if (this.router.getCurrentNavigation()?.extras.state) {
       //puede esra undefined por eso se pone el signo de de exclamacion 
@@ -41,11 +50,16 @@ export class UserComponent implements OnInit {
 
       this.route.paramMap.subscribe(params => {
         const page = +(params.get('page') || '0');
-        this.service.findAllPageable(page).subscribe(pageable => {
-          this.users = pageable.content as User[];
-          this.paginator = pageable;
-          this.SharingData.pageUserEventEmitter.emit({ users: this.users, paginator: this.paginator });
-        });
+
+        console.log('page', page);
+
+        this.store.dispatch(load({page}));
+        // this.service.findAllPageable(page).subscribe(pageable => {
+        //   this.users = pageable.content as User[];
+        //   this.paginator = pageable;
+        //   this.SharingData.pageUserEventEmitter.emit({ users: this.users, paginator: this.paginator });
+        // });
+
       })
 
     }

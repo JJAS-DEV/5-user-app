@@ -1,6 +1,6 @@
 import { createReducer, on } from "@ngrx/store";
 import { User } from "../models/User";
-import { add, find, findAll, remove, setPaginator, update } from "./users.actions";
+import { add, find, findAll, findAllPageable, load, remove, setPaginator, update } from "./users.actions";
 
 const users:User[]=[];
 const user: User=new User();
@@ -14,6 +14,12 @@ export const userReducer=createReducer(
   on(findAll, (state, { users }) => ({
         users: [...users],
         paginator: state.paginator,
+        user: state.user
+    }
+    )),
+     on(findAllPageable, (state, { users,paginator }) => ({
+        users: [...users],
+        paginator: { ...paginator },
         user: state.user
     }
     )),
@@ -68,6 +74,18 @@ export const userReducer=createReducer(
             
         }
     )
+    ),
+     on(load,(state,{page})=>(
+        {
+            users:state.users,
+            paginator:state.paginator,
+            user:state.user
+
+            
+        }
     )
+    )
+
+
     
 )

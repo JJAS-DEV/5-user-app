@@ -7,4 +7,8 @@ export const find= createAction('find',props<{id:number}>());
 export const add = createAction('add', props<{usernew:User}>());
 export const update= createAction('update',props<{updatedUser:User}>());
 export const remove= createAction('remove',props<{id:number}>());
+export const load= createAction('load',props<{page:number}>());
+export const findAllPageable= createAction('findAllPageable',props<{users:User[],paginator:any}>());
+
+
 
