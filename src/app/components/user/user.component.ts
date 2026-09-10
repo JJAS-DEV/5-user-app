@@ -43,17 +43,14 @@ export class UserComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    if (this.users == undefined || this.users.length == 0) {
       console.log('consulta findAll');
 
       // this.service.findAll().subscribe(u => this.users = u);
 
       this.route.paramMap.subscribe(params => {
-        const page = +(params.get('page') || '0');
 
-        console.log('page', page);
 
-        this.store.dispatch(load({page}));
+        this.store.dispatch(load({page:+ (params.get('page') || '0')}));
         // this.service.findAllPageable(page).subscribe(pageable => {
         //   this.users = pageable.content as User[];
         //   this.paginator = pageable;
@@ -62,7 +59,7 @@ export class UserComponent implements OnInit {
 
       })
 
-    }
+    
 
   }
 

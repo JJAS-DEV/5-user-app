@@ -40,9 +40,6 @@ export const routes: Routes = [
         path:'forbidden',
         component:Forbidden403Component
     },
-    {
-        path:'users',
-        component:UserComponent
-    }
+   
 
 ];

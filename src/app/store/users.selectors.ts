@@ -1,8 +1,15 @@
 import { createFeatureSelector } from "@ngrx/store";
 
-export interface UsersState {
+
+export interface UsersFormState {
   users: any[];        // o tu interfaz User
   paginator: any;      // tu objeto de paginación
-  user: any | null;    // usuario seleccionado
-}
-export const selectUserState = createFeatureSelector<UsersState>('users');
+  user: any | null; 
+            errors:{}
+ // usuario seleccionado
+};
+
+
+
+export const selectUserState = createFeatureSelector<UsersFormState>('users');
+export const selectUsersFormState = createFeatureSelector<UsersFormState>('users');
