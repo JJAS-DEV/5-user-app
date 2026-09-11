@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { UserService } from "../services/user.service";
-import { add, addSuccess, findAll, findAllPageable, load, setErrors, setPaginator, update, updateSucess } from "./users.actions";
+import { add, addSuccess, findAll, findAllPageable, load, remove, removeSuccess, setErrors, setPaginator, update, updateSucess } from "./users.actions";
 import { catchError, EMPTY, exhaustMap, map, of, tap } from "rxjs";
 import { User } from "../models/User";
 import Swal from "sweetalert2";
@@ -98,6 +98,37 @@ export class userEffects {
                     
                 }
             )),{dispatch:false})
-        }
+        
+           removeuser$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(remove),
+          exhaustMap(action=> this.service.remove(action.id)
+          .pipe(
+            map(id=>removeSuccess({id}))
+                
+            ,
+            catchError(error=>(error.status==400)?of(setErrors({errors:error.error})):EMPTY
+        )
+
+            ))));
+
+                aSuccessUser$ = createEffect(() =>this.actions$.pipe(
+                ofType(removeSuccess),
+                tap(()=>{
+                        this.router.navigate(['/users/page/0']),
+             Swal.fire({
+                title: "Eliminado!",
+                text: "Usuario eliminado con exito.",
+                icon: "success"
+            });
+                 
+            
+                }
+            )),{dispatch:false})
+        
+            
+        };
+
+          
 
 

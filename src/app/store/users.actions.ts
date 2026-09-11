@@ -2,12 +2,14 @@ import { createAction, props } from "@ngrx/store";
 import { User } from "../models/User";
 
 export const findAll= createAction('findAll',props<{users:User[]}>());
+export const setUserForm= createAction('setUserForm',props<{user:User}>());
 export const setPaginator= createAction('setPaginator',props<{paginator:any}>());
 export const find= createAction('find',props<{id:number}>());
 export const add = createAction('add', props<{userNew:User}>());
 export const update= createAction('update',props<{updatedUser:User}>());
 export const updateSucess= createAction('updateSucess',props<{updatedUser:User}>());
 export const remove= createAction('remove',props<{id:number}>());
+export const removeSuccess= createAction('removeSuccess',props<{id:number}>());
 export const load= createAction('load',props<{page:number}>());
 export const addSuccess = createAction('addSuccess', props<{ userNew: User }>());
 export const resetUser= createAction('resetUser');

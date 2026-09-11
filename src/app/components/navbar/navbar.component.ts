@@ -31,10 +31,17 @@ export class NavbarComponent {
   this.router.navigate(['/login'])
   
  }
+
+ reload(){
+  this.router.navigate(['/users/create']).then(() => {
+  window.location.reload();
+});
+ }
   home(){
 
   this.router.navigate(['/users/page/0'])
   
  }
+ 
 
 }

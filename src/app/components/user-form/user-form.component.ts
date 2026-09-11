@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { Store } from '@ngrx/store';
 import { selectUsersFormState, selectUserState } from '../../store/users.selectors';
-import { add, find, resetUser, update } from '../../store/users.actions';
+import { add, find, resetUser, setUserForm, update } from '../../store/users.actions';
 
 @Component({
   selector: 'user-form',
@@ -65,6 +65,8 @@ export class UserFormComponent implements OnInit {
 
 
   onSubmit(userForm: NgForm): void {
+        this.store.dispatch(setUserForm({ user: this.user }));
+
     // if (userForm.valid) {
       // this.SharingData.newUserEventEmitter.emit(this.user)
       // console.log(this.user)
@@ -72,6 +74,7 @@ export class UserFormComponent implements OnInit {
 
     // }
 
+    this.store.dispatch(setUserForm({ user: this.user }));
     if (this.user.id > 0) {
       this.store.dispatch(update({ updatedUser: this.user }))
 
@@ -82,11 +85,14 @@ export class UserFormComponent implements OnInit {
 
 
 
+
   }
   onClear(userForm: NgForm):void{
+        this.store.dispatch(resetUser());
+
+
     userForm.reset();
     userForm.resetForm();
-
     
   }
 

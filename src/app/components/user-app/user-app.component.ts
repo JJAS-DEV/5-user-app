@@ -52,7 +52,6 @@ export class UserAppComponent implements OnInit {
     //   });
     // })
 
-    this.removeUser();
 
     this.handlerlogin();
 
@@ -103,58 +102,6 @@ export class UserAppComponent implements OnInit {
 
 
   selectedUser?: User;             // propiedad para guardar el usuario encontrado
-  removeUser(): void {
-
-    this.sharingData.idUserEventEmitter.subscribe(id => {
-      // const usuario_remove: User | undefined = this.users.find(user => user.id === id)!;
-      const swalWithBootstrapButtons = Swal.mixin({
-        customClass: {
-          confirmButton: "btn btn-success",
-          cancelButton: "btn btn-danger"
-        },
-        buttonsStyling: false
-      });
-      swalWithBootstrapButtons.fire({
-        title: "se guro que quieres eliminar el usuario? ",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Yes, delete it!",
-        cancelButtonText: "No, cancel!",
-        reverseButtons: true
-      }).then((result) => {
-        if (result.isConfirmed)
-          this.userService.remove((Number(id))).subscribe(() => {
-        
-            // this.users = this.users.filter(user => user.id != id);
-                        this.store.dispatch(remove({ id }))
-                        
-
-              this.router.navigate(['/users/page/0'])
-            
-          });
-
-        swalWithBootstrapButtons.fire({
-          title: "Deleted!",
-          text: "usuario eliminado con exito.",
-          icon: "success"
-        });
-        if (result.dismiss === Swal.DismissReason.cancel)
-          /* Read more about handling dismissals below */
-          swalWithBootstrapButtons.fire({
-            title: "Cancelled",
-            text: "Your imaginary file is safe :)",
-            icon: "error"
-          });
-      });
-
-    })
-
-
-
-
-  }
-
 
 
 
