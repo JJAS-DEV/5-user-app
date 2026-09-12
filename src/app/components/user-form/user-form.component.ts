@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { Store } from '@ngrx/store';
 import { selectUsersFormState, selectUserState } from '../../store/users.selectors';
-import { add, find, resetUser, setUserForm, update } from '../../store/users.actions';
+import { add, find, resetUser, update } from '../../store/users.actions';
 
 @Component({
   selector: 'user-form',
@@ -38,10 +38,10 @@ export class UserFormComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    this.SharingData.selectUserEventEmitter.subscribe(user=>this.user=user);
+    // this.SharingData.selectUserEventEmitter.subscribe(user=>this.user=user);
 
 
-    this.SharingData.errorFormEventEmitter.subscribe(error=>this.errors=error);
+    // this.SharingData.errorFormEventEmitter.subscribe(error=>this.errors=error);
     console.log("estoy en el init del form");
     console.log(this.errors);
 
@@ -65,7 +65,7 @@ export class UserFormComponent implements OnInit {
 
 
   onSubmit(userForm: NgForm): void {
-        this.store.dispatch(setUserForm({ user: this.user }));
+        // this.store.dispatch(setUserForm({ user: this.user }));
 
     // if (userForm.valid) {
       // this.SharingData.newUserEventEmitter.emit(this.user)
@@ -74,7 +74,6 @@ export class UserFormComponent implements OnInit {
 
     // }
 
-    this.store.dispatch(setUserForm({ user: this.user }));
     if (this.user.id > 0) {
       this.store.dispatch(update({ updatedUser: this.user }))
 

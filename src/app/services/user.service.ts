@@ -32,7 +32,9 @@ export class UserService {
     return this.http.put<User>(this.url+"/"+user.id,user);
   }
   remove(id:number):Observable<number>{
-    return this.http.delete<number>(this.url+"/"+id);
+    return this.http.delete<number>(this.url+"/"+id).pipe(
+      map(()=>id)
+    );
   }
 
 

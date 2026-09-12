@@ -32,7 +32,7 @@ export class userEffects {
                             paginator
                         });
                     }),
-                    catchError(() => EMPTY)
+                    catchError((error) => of(error))
                 )
             )
         )
@@ -47,7 +47,7 @@ export class userEffects {
 
                 
             ,
-            catchError(error=>(error.status==400)?of(setErrors({errors:error.error})):EMPTY
+            catchError(error=>(error.status==400)?of(setErrors({userForm: action.userNew, errors:error.error})):EMPTY
         )
 
             ))))
@@ -61,7 +61,7 @@ export class userEffects {
             map(updatedUser=>addSuccess({userNew: updatedUser}))
                 
             ,
-            catchError(error=>(error.status==400)?of(setErrors({errors:error.error})):EMPTY
+            catchError(error=>(error.status==400)?of(setErrors({userForm: action.updatedUser,errors:error.error})):EMPTY
         )
 
             ))));
@@ -104,11 +104,10 @@ export class userEffects {
             ofType(remove),
           exhaustMap(action=> this.service.remove(action.id)
           .pipe(
-            map(id=>removeSuccess({id}))
+            map(()=>removeSuccess({id:action.id}))
                 
-            ,
-            catchError(error=>(error.status==400)?of(setErrors({errors:error.error})):EMPTY
-        )
+            
+      
 
             ))));
 
