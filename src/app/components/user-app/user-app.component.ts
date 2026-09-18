@@ -11,6 +11,8 @@ import { AuthService } from '../../services/auth.service';
 import { Store } from '@ngrx/store';
 import { add, find, findAll, remove, setPaginator, update } from '../../store/users.actions';
 import { selectUserState } from '../../store/users.selectors';
+import { selectAuthState } from '../../store/auth/auth.selectors';
+import { login } from '../../store/auth/auth.actions';
 
 @Component({
   selector: 'app-user',
@@ -18,90 +20,7 @@ import { selectUserState } from '../../store/users.selectors';
   templateUrl: './user-app.component.html',
   styleUrls: ['../user-app.component.css']
 })
-export class UserAppComponent implements OnInit {
-  title: string = 'listado de usuarios';
-  PageUrl: string = '/users/page/';
-  
-
-  user!: User;
-
-
-  constructor(
-    private store: Store<{ users: any }>,
-    private router: Router,
-    private userService: UserService, private sharingData: SharingDataService
-    ,
-    private route: ActivatedRoute, private authservice: AuthService) {
-    this.store.select(selectUserState).subscribe(state => {
-  
-      this.user = {... state.user};
-    });
-
-  }
-
-  ngOnInit(): void {
-    //se lo pasamos con el evento
-    // this.userService.findAll().subscribe(users => {
-    //   this.users = users;
-    // });
-
-    // this.route.paramMap.subscribe(params => {
-    //   const page=+(params.get('page')||'0');
-    //   this.userService.findAllPageable(page).subscribe(pageable => {
-    //     this.users = pageable.content as User[];
-    //   });
-    // })
-
-
-    this.handlerlogin();
-
-  }
-
-  handlerlogin() {
-    this.sharingData.handlerLoginEventEmitter.subscribe(({ username, password }) => {
-      console.log(username + " " + password)
-      this.authservice.LoginUser({ username, password }).subscribe(
-        {
-          next: Response => {
-            const token = Response.token;
-            console.log(token);
-
-            const payload = this.authservice.getPayload(token);
-            const user = { username: payload.sub };
-            const login = {
-              user,
-              isAuth: true,
-              isAdmin: payload.isAdmin
-            }
-            this.authservice.token = token;
-            this.authservice.user = login;
-            this.router.navigate(['/users/page/0'])
-            console.log(payload);
-          },
-          error: error => {
-            if (error.status == 401) {
-              console.log(error.error)
-              Swal.fire('error en el login', error.error.menssage, 'error')
-            } else {
-              throw error;
-            }
-
-          }
-
-        }
-      )
-    })
-
-  }
-
-
-
-
-
-
-
-
-  selectedUser?: User;             // propiedad para guardar el usuario encontrado
+export class UserAppComponent  {
 
 
 
