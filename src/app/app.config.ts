@@ -10,6 +10,7 @@ import { provideEffects } from '@ngrx/effects';
 import { userEffects } from './store/users.effects';
 import { authReducer } from './store/auth/auth.reducer';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { AuthEffects } from './store/auth/auth.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }),
@@ -18,6 +19,6 @@ export const appConfig: ApplicationConfig = {
     provideStore({
         users: userReducer,
         auth: authReducer
-    }), provideEffects(userEffects), provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() })]
+    }), provideEffects(userEffects,AuthEffects), provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() })]
 };
 

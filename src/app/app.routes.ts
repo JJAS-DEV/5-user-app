@@ -40,6 +40,10 @@ export const routes: Routes = [
         path:'forbidden',
         component:Forbidden403Component
     },
+    {
+    path: '**',
+    redirectTo: 'users/page/0'
+  }
    
 
 ];

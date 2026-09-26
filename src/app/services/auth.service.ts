@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { selectAuthState } from '../store/auth/auth.selectors';
-import { login, logout } from '../store/auth/auth.actions';
+import { loginSuccess, logout } from '../store/auth/auth.actions';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +31,6 @@ export class AuthService {
   };
 
   set user(user: any) {
-                this.store.dispatch(login({login:user})) 
 
     sessionStorage.setItem('login', JSON.stringify(user));
 
@@ -68,7 +67,8 @@ export class AuthService {
 
   logout() {
     this.store.dispatch(logout());
-    sessionStorage.removeItem('login');
+      sessionStorage.removeItem('login');
     sessionStorage.removeItem('token');
+   
   }
 }

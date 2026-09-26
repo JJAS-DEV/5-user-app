@@ -5,6 +5,8 @@ import Swal from 'sweetalert2';
 import { SharingDataService } from '../../services/sharing-data/sharing-data.service';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { login } from '../../store/auth/auth.actions';
 
 @Component({
   selector: 'app-auth',
@@ -14,55 +16,24 @@ import { Router } from '@angular/router';
 })
 export class AuthComponent {
 
-  user:User;
 
-  constructor( private sharingdata: SharingDataService, private authService:AuthService,
-    private router:Router
-  ){
-    this.user= new User
+  user: User;
+
+  constructor(private store: Store<{auth: any}>
+  ) {
+    this.user = new User();
   }
 
-  onSubmit(){
-    if(!this.user.username || !this.user.password){
+  onSubmit() {
+    if (!this.user.username || !this.user.password) {
       Swal.fire(
-        'error de validacion',
-        'username y password requeridos',
+        'Error de validacion',
+        'Username y password requeridos!',
         'error'
-      )
-
+      );
     } else {
-          this.authService.LoginUser({ username:this.user.username, password:this.user.password }).subscribe(
-              {
-                next: Response => {
-                  const token = Response.token;
-      
-                  const payload = this.authService.getPayload(token);
-                  const loginData = {
-                    user:{ username: payload.sub },
-                    isAuth: true,
-                    isAdmin: payload.isAdmin
-                  }
-                            
-                  this.authService.token = token;
-                  this.authService.user = loginData;
-                  this.router.navigate(['/users/page/0'])
-                  console.log(payload);
-                },
-                error: error => {
-                  if (error.status == 401) {
-                    console.log(error.error)
-                    Swal.fire('error en el login', error.error.menssage, 'error')
-                  } else {
-                    throw error;
-                  }
-      
-                }
-      
-              }
-            )
-     
-    
+      this.store.dispatch(login({ username: this.user.username, password: this.user.password }));
     }
-
   }
 }
+

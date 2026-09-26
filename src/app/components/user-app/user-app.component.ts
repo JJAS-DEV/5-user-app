@@ -12,7 +12,7 @@ import { Store } from '@ngrx/store';
 import { add, find, findAll, remove, setPaginator, update } from '../../store/users.actions';
 import { selectUserState } from '../../store/users.selectors';
 import { selectAuthState } from '../../store/auth/auth.selectors';
-import { login } from '../../store/auth/auth.actions';
+import { loginSuccess } from '../../store/auth/auth.actions';
 
 @Component({
   selector: 'app-user',
