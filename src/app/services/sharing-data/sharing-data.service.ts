@@ -34,7 +34,7 @@ export class SharingDataService {
   get newUserEventEmitter(): EventEmitter<User>{
    return this._newUserEventEmitter; 
   }
-  get idUserEventEmitter(): EventEmitter<Number>{
+  get idUserEventEmitter(): EventEmitter<number>{
     return this._idUserEventEmitter
   }
 

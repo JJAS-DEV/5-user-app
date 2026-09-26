@@ -5,6 +5,10 @@ import { UserService } from '../../services/user.service';
 import { SharingDataService } from '../../services/sharing-data/sharing-data.service';
 import { PaginadorComponent } from '../paginador/paginador.component';
 import { AuthService } from '../../services/auth.service';
+import { Store } from '@ngrx/store';
+import { selectUserState } from '../../store/users.selectors';
+import { load, remove } from '../../store/users.actions';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'user',
@@ -19,10 +23,16 @@ export class UserComponent implements OnInit {
   users: User[] = [];
   paginator:any={};
   PageUrl: string = '/users/page';
-  constructor(private router: Router,
+  constructor(
+    private store:Store<{users:any}>,
+    private router: Router,
     private service: UserService, private SharingData: SharingDataService, private route: ActivatedRoute,
     private authservice:AuthService
   ) {
+    this.store.select(selectUserState).subscribe(state=>{
+      this.users=state.users;
+      this.paginator=state.paginator;
+    })
 
     if (this.router.getCurrentNavigation()?.extras.state) {
       //puede esra undefined por eso se pone el signo de de exclamacion 
@@ -34,27 +44,41 @@ export class UserComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    if (this.users == undefined || this.users.length == 0) {
       console.log('consulta findAll');
 
       // this.service.findAll().subscribe(u => this.users = u);
 
       this.route.paramMap.subscribe(params => {
-        const page = +(params.get('page') || '0');
-        this.service.findAllPageable(page).subscribe(pageable => {
-          this.users = pageable.content as User[];
-          this.paginator = pageable;
-          this.SharingData.pageUserEventEmitter.emit({ users: this.users, paginator: this.paginator });
-        });
+
+
+        this.store.dispatch(load({page:+ (params.get('page') || '0')}));
+        // this.service.findAllPageable(page).subscribe(pageable => {
+        //   this.users = pageable.content as User[];
+        //   this.paginator = pageable;
+        //   this.SharingData.pageUserEventEmitter.emit({ users: this.users, paginator: this.paginator });
+        // });
+
       })
 
-    }
+    
 
   }
 
   onRemoveUser(id: number): void {
-    this.SharingData.idUserEventEmitter.emit(id);
-
+  
+    Swal.fire({
+      title: "Seguro que quiere eliminar?",
+      text: "Cuidado el usuario sera eliminado del sistema!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.store.dispatch(remove({ id }));
+      }
+    });
   }
   onSelectedUser(user: User): void {
     this.router.navigate(['/users/edit', user.id]);

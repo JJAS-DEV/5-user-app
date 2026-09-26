@@ -3,6 +3,10 @@ import { FormsModule } from '@angular/forms';
 import { User } from '../../models/User';
 import Swal from 'sweetalert2';
 import { SharingDataService } from '../../services/sharing-data/sharing-data.service';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { login } from '../../store/auth/auth.actions';
 
 @Component({
   selector: 'app-auth',
@@ -12,25 +16,24 @@ import { SharingDataService } from '../../services/sharing-data/sharing-data.ser
 })
 export class AuthComponent {
 
-  user:User;
 
-  constructor( private sharingdata: SharingDataService){
-    this.user= new User
+  user: User;
+
+  constructor(private store: Store<{auth: any}>
+  ) {
+    this.user = new User();
   }
 
-  onSubmit(){
-    if(!this.user.username || !this.user.password){
+  onSubmit() {
+    if (!this.user.username || !this.user.password) {
       Swal.fire(
-        'error de validacion',
-        'username y password requeridos',
+        'Error de validacion',
+        'Username y password requeridos!',
         'error'
-      )
-
+      );
     } else {
-
-      this.sharingdata.handlerLoginEventEmitter.emit({username:this.user.username,password:this.user.password})
-    
+      this.store.dispatch(login({ username: this.user.username, password: this.user.password }));
     }
-
   }
 }
+

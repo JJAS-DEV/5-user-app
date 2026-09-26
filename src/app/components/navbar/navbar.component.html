@@ -9,12 +9,12 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" [routerLink]="['/users/page/0']" [state]="{users,paginator}">Home</a>
+          <a class="nav-link active" aria-current="page"href="#" >Home</a>
         </li>
 
         @if(admin){
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/users/create']">New User</a>
+          <a class="nav-link" (click)="reload()" >New User</a>
         </li>
         }
       </ul>
